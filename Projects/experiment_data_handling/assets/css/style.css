@@ -1,0 +1,136 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+p{
+    margin-block: 20px;
+}
+
+ul{
+    margin-left: 30px;
+}
+
+li{
+    margin-left: 10px;
+    margin-top: 5px;
+}
+
+
+.navbar {
+    background-color: rgba(0, 0, 0, 0.95);
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    margin-bottom: 30px;
+}
+
+.title_div {
+    font-size: 3rem;
+    margin-left: 50px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+}
+
+
+body {
+    counter-reset: fig_num;
+    counter-reset: section_num;
+}
+
+.section {
+    width: 80%;
+    margin: auto;
+    font-size: 1.5rem;
+    counter-increment: section_num;
+    counter-reset: subsection_num;
+}
+
+.section>h1 {
+    text-decoration: underline;
+    padding-left: 2%;
+    font-size: 2.4rem;
+    border-top: 1px double black;
+    padding-top: 10px;
+}
+
+.section>h1::before {
+    content: counter(section_num) " - ";
+}
+
+p {
+    text-align: justify;
+}
+
+.code_mark {
+    color: black;
+    background-color: rgba(128, 128, 128, 0.1);
+    font-style: italic;
+}
+
+.figure {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    counter-reset: sub_fig_num;
+    counter-increment: fig_num;
+}
+
+.subfigure {
+    margin: 0;
+}
+
+.sub_caption {
+    text-align: center;
+    margin-top: 0;
+    font-style: italic;
+    font-size: 1.2rem;
+    counter-increment: sub_fig_num;
+}
+
+.sub_caption::before {
+    content: "Figure-" counter(fig_num) "." counter(sub_fig_num)") ";
+}
+
+.fig_caption {
+    font-style: italic;
+    font-size: 1.3rem;
+}
+
+.fig_caption::before {
+    content: "Figure-" counter(fig_num) ") ";
+}
+
+.figure>img {
+    margin-inline: 50%;
+}
+
+.subsection {
+    width: 90%;
+    margin: auto;
+}
+
+.subsection>h1 {
+    font-size: 1.8rem;
+    counter-increment: subsection_num;
+}
+
+.subsection>h1::before {
+    content: counter(section_num) "." counter(subsection_num) " - ";
+}
+
+footer {
+    background-color: rgba(0, 0, 0, 0.95);
+    color: white;
+    text-align: center;
+    padding: 5px;
+}
+
+.copyrights{
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    margin-top: 10px;
+}

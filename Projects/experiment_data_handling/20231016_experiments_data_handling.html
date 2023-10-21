@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="author" content="dev-ddr"/>
+    <meta name="creator" content="dev-ddr"/>
+    <meta name="description" content="Large Experimental data handling system in python for PIV data, DAQ data and PT data."/>
+    <meta name="keywords" content="data handling, python, experimental data, PIV data"/>
+
+    <title>Experimental data handling</title>
+    <meta property="og:title" content="Experimental data handling system" />
+    <meta property="og:description" content="Large Experimental data handling system in python for PIV data, DAQ data and PT data." />
+    <meta property="og:type" content="article" />
+    <meta property="og: article:section" content="Technology" />
+    <meta property="og:image" content="images/r_theta_plane_marked.jpeg" />
+    <meta property="og:url" content="https://dev-ddr.github.io/" />
+
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/contact_icons.css">
+
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
+            },
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+</head>
+
+<body>
+
+    <div class="navbar">
+        <div class="title_div">
+            PIV experiments data handling system
+        </div>
+    </div>
+
+    <section class="section">
+        <h1>Experiment setup</h1>
+
+        <p>
+            The sector combustor rig consists of $20^\circ$ sector of to-the-scale gas turbine combustor. The
+            experiments
+            consists of high inlet mass flow rate of air ($m_{total}$) ranging from 0.1 kg/s to 0.5 kg/s. The inlet
+            pressures ($P_{in}$) are also changed from 0 bar gauge to 4 bar gauge. All these experiments are done under
+            cold flow conditions. No fuel is supplied to the system in the experiments.
+        </p>
+
+        <p>
+            The main experiments consists of Particle Image Velocimetry (PIV), wherein the flow inside the primary and
+            exit zone of the combustor is visualized using high-speed lasers and cameras. Simultaneous acquisition of
+            dynamic pressure sensors (i.e. pressure fluctuations) are also captured.
+        </p>
+
+        <p>
+            The data for any experiments consists of 3 major things.
+        <ul>
+            <li> <a href="#PIV_data_handling">PIV flow field data</a> : - Consists of $\vec{u}$ and $\vec{v}$ velocity
+                vectors in 2-D grid. The files are in .vc7 format. <mark class="code_mark">ddr_davis_data</mark> is used
+                to handle this data.
+                <ul>
+                    <li>Average data</li>
+                    <li>Instantaneous data</li>
+                </ul>
+            </li>
+            <li> <a href="#dynamic_PT_data_handling">Dynamic pressure sensor data</a> :- Consists of voltage reading for
+                multiple PT. <mark class="code_mark">lvm_reader</mark> is used to handle this data. The code just reads
+                the data from
+                file and converts it into numpy array for further processing. </li>
+            <li><a href="#DAQ_data_handling">Combustor controll system data</a> :- Consists of data from multiple static
+                p[ressure transducers attached
+                on the combustor and inlet mass flow rate ($m_{total}$) data. This data is stored in .pickle file during
+                the run of the experiment.</li>
+        </ul>
+        </p>
+    </section>
+
+
+    <section id="PIV_data_handling" class="section">
+        <h1> PIV data handling </h1>
+
+        <p>
+            The data organization is done in multiple steps. Every succesfull run is stored in the excel file. Each run
+            is characterized by its unique $m_{total}$ and $P_{in}$. But to consider for multiple runs, trial number is
+            provided to each run. Hence, for R-theta plane PIV the cases of $m_{total}$ and $P_{in}$ are same, but trial
+            number is different. This information is stored in excel file. This excel file then contains the folder path
+            of the davis-set of the respective experiment.
+        </p>
+
+        <p> Similarly, the control parameters of respective runs are also stored in the same excel file. Now, the excel
+            file also consists of some meta parameters like coordinates of swirler edge, the coordinate of swirler
+            center etc. This is also to be updated for every run. Usually this remains the same for same calibration
+            set.
+        </p>
+
+        <div class="figure">
+            <div class="sub_figure">
+                <img src="images/r_theta_plane.jpeg">
+                <p class="sub_caption">R-theta plane</p>
+            </div>
+
+            <div class="sub_figure">
+                <img src="images/streamwize_plane.jpeg">
+                <p class="sub_caption">Streamwise plane</p>
+            </div>
+
+            <div class="fig_caption">Raw images of PIV data</div>
+        </div>
+
+        <p>
+            So, below are the steps for data segregation for PIV experiment. Although, this steps are sometimes followed
+            for other experiments.
+        </p>
+
+        <div class="subsection">
+            <h1> Mark of datumn points </h1>
+
+            <p>
+                Any experiment performed will be done to obtain imformation at any particular location of the
+                experimental setup. Like PIV is performed at particular plane located at predefined location, this
+                location needs identification in the image so as to convert the recorded images into the world
+                coordinate system. To do this, either we can place some identification and then take the image. Or-else,
+                we can keep some mark which will be present in all the recorded images.
+            </p>
+
+            <p>
+                First step is to identify the coordinate or pixcel location of these marks. Below figure shows the marks
+                done on the raw image to identify the location of swirler. Here, two important parameters were to be
+                identified. 1) Identify the angle of the swirler and 2) Identify the center of the swirler. By marking
+                multiple points on the line shown by red dots, identifies the swirler angle. And by marking the midpoint
+                of orange points shown in the figure, we get the center of the swirler shown as black dot we identify
+                the center or (zero, zero) coordinate.
+            </p>
+
+            <div class="figure">
+                <img src="images/streamwize_plane_marked.jpeg">
+                <div class="fig_caption">Marked Datumn points</div>
+            </div>
+
+            <p>
+                Now, this arrangement of datumns can be different for different experiments. Hence this has to be chosen
+                wisely. For, R-theta plane experiment, this choise of datumn changes. In R-theta plane, only one datumn
+                is required because , we just need the center of the swirler. During multiple experiments, we
+                specifically know the location of R-theta plane, hence only the center is to be identified to mark the
+                plane exactly in the world coordinate system. Below figure shows the marking of 3 points on the swirler
+                (orage color) which can uniquely identify the center of the circle (circumcenter, marked as black).
+            </p>
+
+            <div class="figure">
+                <img src="images/r_theta_plane_marked.jpeg">
+                <div class="fig_caption">Marked Datumn points on R-theta plane</div>
+            </div>
+        </div>
+
+        <div class="subsection">
+            <h1>Adding path to PIV experiment data folder</h1>
+            <p>
+                Add paths of experiment folders in excel files. This file will then be read from the python and each
+                experimental case can be accessed from python. Using excel and python, we just have to input the
+                experiment parameters. The python will then search for respective files and folders using data in excel
+                and returns the data. This helps in longer run, as we tend to forget the path and folder locations.
+            </p>
+        </div>
+
+        <div class="subsection">
+            <h1>Saving the data to local folder</h1>
+            <p>
+                Keeping the hard disk attached to the PC for longer time is avoided here. Hence, the data from hard-disk
+                is copied into the local folder in the form of <mark class="code_mark">numpy</mark> array. The data is
+                saves as-it-is. No prerocessing is performed on the data before saving.
+            </p>
+        </div>
+    </section>
+
+    <section class="section" id="dynamic_PT_data_handling">
+        <h1>Dynamic PT data handling</h1>
+        <p>
+            Dynamic PT data is recorded simultaneously with PIV at multiple locations of the combustor. This helps in
+            understanding flow-acoustics interactions. During PIV experiment, the NI-DAQ is triggered from laser and
+            dynamic PT data is acquired and saved automatically. But PIV images needs the confirmation of user to save.
+            So, sometimes if PIV images are not proper then re-run is done. During this re-run, dynamic PT data is again
+            saved. Hence while comparing the PIV data with any dynamic PT file, care has to be taken if there is any
+            mis-match of acquisition time.
+        </p>
+
+        <p>
+            Once the correct file of the run is identified, then it is stored in separate location with trial number
+            appended to its file name. Python code searches the file having particular trial number. The files of all
+            the run done in the experiments are stored in single folder with unique names for ease of searching.
+        </p>
+    </section>
+
+    <section class="section" id="DAQ_data_handling">
+        <h1>DAQ data handling</h1>
+        <p>
+            DAQ data contains the data related to monitoring of the experimental control system. System monitoring is
+            started way before the PIV experiments are done. Hence, if we only want the data during the PIV experiment,
+            then we first need to crop the data accordingly and save it somewhere else. The files of all the run done in
+            the experiments are stored in single folder with unique names for ease of searching.
+        </p>
+    </section>
+
+    <footer>
+        <div class="copyrights">@dev-ddr</div>
+        <div>
+            <a href="https://scholar.google.com/citations?user=Z_QUss8AAAAJ&hl=en" target="_blank" class="fa fa-google"></a>
+            <a href="https://www.linkedin.com/in/dev-ddr" target="_blank" class="fa fa-linkedin"></a>
+            <a href="https://github.com/dev-ddr?tab=repositories" target="_blank" class="fa fa-github"></a>
+        </div>
+    </footer>
+
+
+</body>
+
+
+</html>
