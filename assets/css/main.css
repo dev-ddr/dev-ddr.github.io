@@ -6,6 +6,7 @@
 
 body{
     min-height: 100vh;
+    min-width: 1000px;
 }
 
 
@@ -13,9 +14,9 @@ body{
     background: rgba(0, 0, 0, 0.7) url("../../images/iisc_img4.jpg");
     background-size: cover;
     background-blend-mode: darken;
-    height: 50vh;
+    height: 300px;
     display: flex;
-    justify-content: left;
+    justify-content: space-around;
     align-items: top;
 }
 
@@ -26,7 +27,7 @@ body{
     align-items: flex-end;
     width: 40%;
     color: rgba(255, 255, 255, 0.7);
-    margin-top: 10%;
+    margin-top: 100px;
 }
 
 .large_text {
@@ -49,35 +50,69 @@ hr.hr1 {
 }
 
 
-.about_section {
-    height: 50vh;
-    font-size: 1.5rem;
+.contact_info{
+    color: white;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-end;
     justify-content: center;
-    margin-top: 5%;
+    font-size: 1.5rem;
+    margin-left: 50px;
+    width: 40%;
 }
 
-#about_logos {
-    display: flex;
-    justify-content: center;
-    width: 100%;
+.contact_info p{
+    margin-top: 10px;
 }
 
-#nit_logo {
-    margin-inline: 5%;
+
+hr.hr_section_separator{
+    border: 2px dashed gray;
+    width: 95%;
+    margin-inline: auto;
+    margin-top: 30px;
+    margin-bottom: 30px;
 }
 
-#honda_logo {
-    margin-inline: 5%;
+/* project overview css */
+
+.gen_section{
+    max-width: 1700px;
+    margin-top: 50px;
+    margin-inline: 100px;
 }
 
-#nit_logo img {
-    width: 10rem;
+.gen_section>h1{
+    color: rgb(68, 68, 68);
+    font-size: 2.5rem;
+    margin-bottom: 12px;
+    text-decoration: underline;
 }
 
-#honda_logo img {
-    width: 10rem;
+.project_subsection{
+    margin-top: 30px;
+    margin-inline: 70px;
 }
+
+.sub_project{
+    margin-left: 100px;
+    font-size: 1.3rem;
+    text-align: justify;
+}
+
+.sub_project > h1{
+    font-size: 2rem;
+    margin-bottom: 7px;
+    margin-left: -50px;
+}
+
+.sub_project > ul{
+    margin: 15px 70px;
+}
+
+.sub_project > ul >li{
+    margin-top: 10px;
+}
+
+
 

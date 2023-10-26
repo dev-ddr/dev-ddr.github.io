@@ -1,16 +1,23 @@
-.timeline_section {
+/* .timeline_section {
     background-color: white;
-    font-family: Helvetica, sans-serif;
-    margin-top: 50px;
-    margin-bottom: 50px;
+    max-width: 1700px;
+    margin: auto;
+    margin-inline: 50px;
 }
 
+.timeline_section > h1{
+    color: rgb(68, 68, 68);
+    font-size: 2.5rem;
+    margin-bottom: 12px;
+} */
 
 /* The actual timeline (the vertical ruler) */
 .timeline {
     position: relative;
+    font-family: Helvetica, sans-serif;
     max-width: 1400px;
-    margin: 0 auto;
+    margin-inline: auto;
+    margin-top: 30px;
 }
 
 /* The actual timeline (the vertical ruler) */
