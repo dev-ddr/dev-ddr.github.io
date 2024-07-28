@@ -1,0 +1,46 @@
+
+.navbar {
+    background-color: rgba(0, 0, 0, 0.95);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.7rem;
+}
+
+.container {
+    display: flex;
+    width: 90%;
+    justify-content: left;
+    align-items: center;
+}
+
+.navbar ul {
+    display: flex;
+    list-style: none;
+    justify-content: right;
+    width: 80%;
+}
+
+.my_brand {
+    justify-content: left;
+    margin-left: 1rem;
+    width: 20%;
+}
+
+.my_brand img {
+    width: 80px;
+    margin-top: 10px;
+}
+
+.menu_tabs>li {
+    padding-left: 5rem;
+}
